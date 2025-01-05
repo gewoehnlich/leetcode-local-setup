@@ -13,15 +13,12 @@ Example: ./init.sh 123 py cpp c php"
 fi
 
 
-shift
 declare -a languages
-languages=("$@")
-
-if [[ -z "$languages" ]]; then
-    languages=("$DEFAULT_LANGUAGES")
+if [[ -z "$2" ]]; then
+    languages=(${DEFAULT_LANGUAGES[@]})
+else 
+    shift
+    languages=($@)
 fi
 
-
-echo "filename: $filename"
-echo "languages: $languages"
 
