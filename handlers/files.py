@@ -2,19 +2,18 @@
 import os
 from typing import List
 
+# rewrite everything to Path() from pathlib
+
 def makeDirectoryAndFiles(problem_number: str, file_formats: List[str]):
     folder_name = problem_number
     createFolder(folder_name)
-
     createFiles(folder_name, problem_number, file_formats)
-
 
 def createFolder(folder_name: str):
     if os.path.exists(folder_name):
         return
 
     os.makedirs(folder_name)
-
 
 def createFiles(folder_name: str, problem_number: str, file_formats: List[str]):
     path = folder_name + '/' + problem_number + '.'
@@ -30,7 +29,6 @@ def createFiles(folder_name: str, problem_number: str, file_formats: List[str]):
                 continue
 
         writeTemplate(file_path, file_format)
-
 
 def writeTemplate(file_path: str, file_format: str):
     with open(file_path, 'w') as file:
