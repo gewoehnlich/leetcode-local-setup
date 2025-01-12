@@ -1,34 +1,24 @@
 #!/usr/bin/env python3
-import os
 from typing import List
+from pathlib import Path
 
-# rewrite everything to Path() from pathlib
-
-def makeDirectoryAndFiles(problem_number: str, file_formats: List[str]):
-    folder_name = problem_number
-    createFolder(folder_name)
-    createFiles(folder_name, problem_number, file_formats)
-
-def createFolder(folder_name: str):
-    if os.path.exists(folder_name):
-        return
-
-    os.makedirs(folder_name)
-
-def createFiles(folder_name: str, problem_number: str, file_formats: List[str]):
-    path = folder_name + '/' + problem_number + '.'
+def createFiles(problem_number: str, file_formats: List[str]):
     for file_format in file_formats:
-        file_path = path + file_format
-        if os.path.exists(file_path):
+        file_path = Path(f"{problem_number}/{problem_number}.{file_format}")
+
+        file_path.parent.mkdir(parents=True, exist_ok=True)
+
+        if file_path.exists():
             response = input(
                 f"Seems like the {file_path} file already exists!\n" + 
-                "Do you want to rewrite the file with a clear template?\n" + "(Y/n) "
+                "Do you want to rewrite the file with a clear template?\n(Y/n) "
             )
 
-            if response != 'Y':
+            if response.lower() != 'y':
                 continue
 
         writeTemplate(file_path, file_format)
+
 
 def writeTemplate(file_path: str, file_format: str):
     with open(file_path, 'w') as file:
