@@ -1,7 +1,8 @@
-# from bs4 import BeautifulSoup
 from pathlib import Path
 from bs4 import BeautifulSoup
-from parsers.examples import parseExamples
+from parsers.template import parseTemplate
+from parsers.testcases import parseTestcases
+
 
 def parseHTML():
     file_path = Path("files/Two Sum - LeetCode.html")
@@ -11,15 +12,10 @@ def parseHTML():
     soup = BeautifulSoup(content, "lxml")
 
     templateData = soup.find(class_="view-lines monaco-mouse-cursor-text").find_all("div")
-    for temp in templateData:
-        text_content = temp.text
-        print(text_content)
+    template = parseTemplate()
 
-    examplesData = soup.find(class_="elfjS").find_all("pre")
-    for ex in examplesData:
-        text_content = ex.text
-        examples = parseExamples(text_content)
-        print(examples)
+    testcasesData = soup.find(class_="elfjS").find_all("pre")
+    testcases = parseTestcases(examplesData)
 
-    # return template, examples
+    return template, testcases
 
