@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
-from handlers.select_html_files import getHTMLFiles()
+import sys   # remove later, used for debug
+from handlers.select_html_files import getHTMLFiles
 
 if __name__ == '__main__':
     html_files = getHTMLFiles()
+    sys.exit()
     for html in html_files:
         folder = createFolder(html)
         file = createFile(folder)
