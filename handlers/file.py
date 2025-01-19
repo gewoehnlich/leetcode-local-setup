@@ -1,16 +1,36 @@
 from pathlib import Path
 from bs4 import BeautifulSoup
+import shutil
 
 def createFile(filepath: str) -> str:
     soup = getSoupObject(filepath)
     title = soup.find("div", class_="text-title-large").find("a").text
 
-    folder = title
-    file = title
+    foldername = title
+    filename = title
     fileformat = getFileFormat(filepath)
-    print(folder)
-    print(file)
-    print(fileformat)
+    
+    file = Path(f"{foldername}/{filename}{fileformat}")
+    file.parent.mkdir(parents=True, exist_ok=True)
+
+    filestring = str(file)
+    if file.exists():
+        moveFile(filestring)
+
+    return filestring 
+
+
+def moveFile(filestring: str) -> None:
+    source = Path(filestring)
+
+    folder = source.parent
+    file = source.name
+
+    destination = Path(f"{folder}/older_files/{file}")
+    destination.parent.mkdir(parents=True, exist_ok=True)
+
+    # source.rename(destination)
+    shutil.move(str(source), str(destination))
 
 
 def getSoupObject(filepath: str) -> object:
