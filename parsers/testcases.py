@@ -1,18 +1,22 @@
 import re
 import ast
 from typing import List, Dict
+from handlers.soup import getSoupObject
 
-def parseTestcases(data: List[str]) -> List[Dict[str]]:
+def getTestcases(filepath: str) -> List[Dict[str]]:
+    soup = getSoupObject(filepath)
+
     testcases = []
     for ex in data:
-        testcase = handler(ex.text)
+        testcase = parse(ex.text)
         testcases.append(testcase)
 
     print(testcases)
     return testcases
 
 
-def handler(text: str) -> Dict[str]:
+def parse(text: str) -> Dict[str]:
+    if re.search( # check for whether the text start with input or output
     input_section = re.search(r"Input:\s*(.*)", input_str)
     if not input_section:
         raise ValueError("No 'Input:' section found in the string.")

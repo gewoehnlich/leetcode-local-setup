@@ -1,6 +1,7 @@
 from pathlib import Path
 from bs4 import BeautifulSoup
 import shutil
+from handlers.soup import getSoupObject
 
 def createFile(filepath: str) -> str:
     soup = getSoupObject(filepath)
@@ -29,17 +30,7 @@ def moveFile(filestring: str) -> None:
     destination = Path(f"{folder}/older_files/{file}")
     destination.parent.mkdir(parents=True, exist_ok=True)
 
-    # source.rename(destination)
     shutil.move(str(source), str(destination))
-
-
-def getSoupObject(filepath: str) -> object:
-    filepath = Path(filepath)
-    with filepath.open("r", encoding="utf-8") as file:
-        content = file.read()
-
-    soup = BeautifulSoup(content, "lxml")
-    return soup
 
 
 def getFileFormat(filepath: str) -> str:
