@@ -1,32 +1,62 @@
 import re
-import ast
 from typing import List, Dict
 from handlers.soup import getSoupObject
+from exceptions.exceptions import ParseException
 
-def getTestcases(filepath: str) -> List[Dict[str]]:
-    soup = getSoupObject(filepath)
+def getTestcases(filepath: str) -> Dict[str, List[str]]:
+    amount = getAmount(filepath)
+    variables = getVariables(filepath)
+    values = getValues(filepath)
 
-    testcases = []
-    for ex in data:
-        testcase = parse(ex.text)
-        testcases.append(testcase)
+    testcases = handleTestcases(amount, variables, values)
 
-    print(testcases)
     return testcases
 
 
-def parse(text: str) -> Dict[str]:
-    if re.search( # check for whether the text start with input or output
-    input_section = re.search(r"Input:\s*(.*)", input_str)
-    if not input_section:
-        raise ValueError("No 'Input:' section found in the string.")
+def getAmount(filepath: str) -> int:
+    soup = getSoupObject(filepath)
+    divs = soup.find("div", class_="flex flex-wrap items-center gap-x-2 gap-y-4").find_all("button")
 
-    ex_str = re.split(r",\s*(?![^[]*\])", input_section.group(1))
+    amount = len(divs) - 1
+    return amount 
 
-    testcase = {}
-    for var in variables:
-        name, value = map(str.strip, var.split("=", 1))
-        testcase[name] = parsed_value
 
-    return testcase
+def getVariables(filepath: str) -> List[str]:
+    soup = getSoupObject(filepath)
+    divs = soup.find_all("div", class_="text-xs font-medium text-label-3 dark:text-dark-label-3")
+
+    variables = []
+    for div in divs:
+        text = div.text
+        variable = re.sub(r" =\s*$", "", text)
+        variables.append(variable)
+
+    return variables
+
+
+def getValues(filepath: str) -> List[str]:
+    soup = getSoupObject(filepath)
+    divs = soup.find_all("div", class_="cm-line")
+
+    values = []
+    for div in divs:
+        value = div.text
+        values.append(value)
+
+    return values
+
+
+def handleTestcases(amount: int, variables: List[str], values: List[str]) -> Dict[str, List[str]]:
+    if (amount * len(variables) != len(values)):
+        raise ParseException
+
+
+    testcases = dict()
+    for variable in variables:
+        testcases[variable] = list()
+
+    for i in range(len(values)):
+        testcases[variables[i % len(variables)]].append(values[i])
+
+    return testcases
 

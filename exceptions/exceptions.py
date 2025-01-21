@@ -6,3 +6,11 @@ class NoFilesSelectedException(Exception):
 
         super().__init__(error_message)
 
+class ParseException(Exception):
+    def __init__(self):
+        error_message = (
+            "Something went wrong while parsing the file!"
+        )
+
+        super().__init__(error_message)
+
