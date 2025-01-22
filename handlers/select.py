@@ -42,7 +42,7 @@ def getLastDirectory() -> None:
 
 
 def saveLastDirectory(directory: str) -> None:
-    path = Path("config.json")    
+    path = Path(".last_directory.json")    
     if not path:
         return False
     
@@ -53,7 +53,7 @@ def saveLastDirectory(directory: str) -> None:
         except json.JSONDecodeError:
             pass
 
-    data["last_directory"] = directory
+    data["last_directory_path"] = directory
 
     with open(path, "w") as file:
         json.dump(data, file, indent=4)

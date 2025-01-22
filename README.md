@@ -1,4 +1,4 @@
-# environment to solve leetcode problems
+# leetcode local setup 
 
 ### project goal description:
 
