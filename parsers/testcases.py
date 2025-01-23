@@ -3,10 +3,43 @@ from typing import List, Dict
 from handlers.soup import getSoupObject
 from exceptions.exceptions import ParseException
 
+class Testcases:
+    def __init__(self, filepath):
+        self.soup = getSoupObject(filepath)
+
+    def getTestcases(self) -> str:
+        isTestResultTabSet = checkIfTestResultTabIsSet(filepath)
+        if isTestResultTabSet:
+            amount, variables, values = parseTestResultTab()
+        else:
+            amount, variables, values = parseLeftPanel()
+
+        testcases = handleTestcases(amount, variables, values)
+        return testcases
+    
+    def checkIfTestResultTabIsSet(self) -> bool:
+        classname = "flex h-full items-center justify-center text-label-4 dark:text-dark-label-4"
+        div = self.soup.find("div", classname)
+        if not div:
+            return False
+        
+        return div.text == "You must run your code first"
+
+    def parseTestResultTab(self) -> List[int, List[str], List[str]]:
+
+    def parseLeftPanel(self) -> List[int, List[str], List[str]]:
+
+
 def getTestcases(filepath: str) -> Dict[str, List[str]]:
-    amount = getAmount(filepath)
-    variables = getVariables(filepath)
-    values = getValues(filepath)
+    isTestResultTabSet = checkIfTestResultTabSet(filepath)
+    if isTestResultTabSet:
+        amount, variables, values = parseTestResultTab()
+    else:
+        amount, variables, values = parseLeftPanel()
+
+    # amount = getAmount(filepath)
+    # variables = getVariables(filepath)
+    # values = getValues(filepath)
 
     testcases = handleTestcases(amount, variables, values)
 

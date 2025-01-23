@@ -2,13 +2,15 @@ from pathlib import Path
 from bs4 import BeautifulSoup
 import shutil
 from handlers.soup import getSoupObject
+from exceptions.exceptions import WrongConfigDataException
+from typing import List
+import re
+import json
 
 def createFile(filepath: str) -> str:
     soup = getSoupObject(filepath)
     title = soup.find("div", class_="text-title-large").find("a").text
-
-    foldername = title
-    filename = title
+    foldername, filename = getFolderAndFileNames(title)
     fileformat = getFileFormat(filepath)
     
     file = Path(f"{foldername}/{filename}{fileformat}")
@@ -19,6 +21,42 @@ def createFile(filepath: str) -> str:
         moveFile(filestring)
 
     return filestring 
+
+
+def getFolderAndFileNames(title: str) -> List[str]:
+    problem_number = re.match(r'^(\d+)', title).group(1)
+    
+    foldername_config_value = getConfigValue("folder_names")
+    filename_config_value = getConfigValue("file_names")
+
+    if foldername_config_value == "short":
+        foldername = problem_number
+    elif foldername_config_value == "full":
+        foldername = title
+
+    if filename_config_value == "short":
+        filename = problem_number
+    elif filename_config_value == "full":
+        filename = title
+
+    return [foldername, filename]
+
+
+def getConfigValue(key: str) -> str:
+    config = Path("config.json")    
+    if not config:
+        return "full"
+
+    with open(config, "r") as file:
+        data = json.load(file)
+        if not data.get(key):
+            return False
+
+        value = data.get(key)
+        if value != "short" and value != "full":
+            raise WrongConfigDataException
+        
+        return value 
 
 
 def moveFile(filestring: str) -> None:

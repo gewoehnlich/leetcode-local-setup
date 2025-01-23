@@ -29,16 +29,16 @@ def getHTMLFiles() -> List[str]:
 
 
 def getLastDirectory() -> None:
-    path = Path("config.json")    
+    path = Path(".last_directory.json")    
     if not path:
         return False
 
     with open(path, "r") as file:
         data = json.load(file)
-        if not data.get("last_directory"):
+        if not data.get("last_directory_path"):
             return False
         
-        return data.get("last_directory")
+        return data.get("last_directory_path")
 
 
 def saveLastDirectory(directory: str) -> None:
