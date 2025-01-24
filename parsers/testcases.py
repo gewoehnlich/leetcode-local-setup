@@ -1,20 +1,20 @@
 import re
 from typing import List, Dict
 from handlers.soup import getSoupObject
-from exceptions.exceptions import ParseException
+from exceptions.exceptions import ParseException, LeftPanelNoMatchException
 
 class Testcases:
     def __init__(self, filepath):
         self.soup = getSoupObject(filepath)
 
-    def getTestcases(self) -> str:
+    def getTestcases(self, filepath) -> str:
         isTestResultTabSet = checkIfTestResultTabIsSet(filepath)
         if isTestResultTabSet:
-            amount, variables, values = parseTestResultTab()
+            variables, values = parseTestResultTab()
         else:
-            amount, variables, values = parseLeftPanel()
+            variables, values = parseLeftPanel()
 
-        testcases = handleTestcases(amount, variables, values)
+        testcases = handleTestcases(variables, values)
         return testcases
     
     def checkIfTestResultTabIsSet(self) -> bool:
@@ -28,6 +28,25 @@ class Testcases:
     def parseTestResultTab(self) -> List[int, List[str], List[str]]:
 
     def parseLeftPanel(self) -> List[int, List[str], List[str]]:
+        examples = self.soup.find("div", class_="elfjS").find_add("pre")
+        for ex in examples:
+            input = parseLeftPanelHandler("Input:")
+            output = parseLeftPanelHandler("Output:")
+
+    def parseLeftPanelHandler(text: str) -> str:
+        match = re.search(rf'{text}', text)
+
+        if not match:
+            raise LeftPanelNoMatchException(text)
+
+        match_position = match.end()
+        result = re.search(r'</strong>\s*(.*)', text[match_position:])
+
+        if not result:
+            raise LeftPanelNoMatchException("</strong> ")
+
+        return result.group(1)
+
 
 
 def getTestcases(filepath: str) -> Dict[str, List[str]]:

@@ -26,3 +26,11 @@ class WrongConfigDataException(Exception):
 
         super().__init__(error_message)
 
+class LeftPanelNoMatchException(Exception):
+    def __init__(self, text):
+        error_message = (
+            f"Didn't find any {text}, while parsing the Left Panel"
+        )
+
+        super().__init__(error_message)
+
