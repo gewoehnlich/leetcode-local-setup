@@ -2,15 +2,15 @@
 from handlers.select import getHTMLFiles
 from handlers.file import createFile
 from parsers.template import getCodeTemplate
-from parsers.testcases import getTestcases
+from parsers.testcases import Testcases 
 from handlers.compile import compileFile
 
 
 if __name__ == '__main__':
     html_files = getHTMLFiles()
     for filepath in html_files:
-        file = createFile(filepath)
-        code = getCodeTemplate(filepath)
-        testcases = getTestcases(filepath)
-        compileFile(file, code, testcases)
+        # file = createFile(filepath)
+        # code = getCodeTemplate(filepath)
+        testcases = Testcases(filepath).getTestcases()
+        # compileFile(file, code, testcases)
 

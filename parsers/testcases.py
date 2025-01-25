@@ -6,17 +6,17 @@ from exceptions.exceptions import ParseException, LeftPanelNoMatchException
 class Testcases:
     def __init__(self, filepath):
         self.soup = getSoupObject(filepath)
-
-    def getTestcases(self, filepath) -> str:
-        isTestResultTabSet = checkIfTestResultTabIsSet(filepath)
-        if isTestResultTabSet:
-            variables, values = parseTestResultTab()
-        else:
-            variables, values = parseLeftPanel()
-
-        testcases = handleTestcases(variables, values)
-        return testcases
+        self.dict = dict()
     
+    def getTestcases(self) -> str:
+        isTestResultTabSet = self.checkIfTestResultTabIsSet()
+        if isTestResultTabSet:
+            self.parseTestResultTab()
+        else:
+            self.parseLeftPanel()
+
+        print(self.dict)
+
     def checkIfTestResultTabIsSet(self) -> bool:
         classname = "flex h-full items-center justify-center text-label-4 dark:text-dark-label-4"
         div = self.soup.find("div", classname)
@@ -25,90 +25,50 @@ class Testcases:
         
         return div.text == "You must run your code first"
 
-    def parseTestResultTab(self) -> List[int, List[str], List[str]]:
+    def parseTestResultTab(self) -> Dict[str, List[str]]:
+        print("something")
 
-    def parseLeftPanel(self) -> List[int, List[str], List[str]]:
-        examples = self.soup.find("div", class_="elfjS").find_add("pre")
+    def parseLeftPanel(self) -> Dict[str, List[str]]:
+        parsedData = dict()
+        examples = self.soup.find("div", class_="elfjS").find_all("pre")
         for ex in examples:
-            input = parseLeftPanelHandler("Input:")
-            output = parseLeftPanelHandler("Output:")
+            input, output = self.parseLeftPanelExample(ex.text)
+            self.updateDict(input, output)
 
-    def parseLeftPanelHandler(text: str) -> str:
-        match = re.search(rf'{text}', text)
+    def parseLeftPanelExample(self, data: str) -> List[str]:
+        inputString = "Input: "
+        inputMatch = re.search(rf'{inputString}', data) 
+        if not inputMatch:
+            raise LeftPanelNoMatchException(inputString)
+        
+        outputString = "Output: "
+        outputMatch = re.search(rf'{outputString}', data)
+        if not outputMatch:
+            raise LeftPanelNoMatchException(outputString)
 
-        if not match:
-            raise LeftPanelNoMatchException(text)
+        explanationString = "Explanation: "
+        explanationMatch = re.search(rf'{explanationString}', data)
 
-        match_position = match.end()
-        result = re.search(r'</strong>\s*(.*)', text[match_position:])
+        explanationMatchBegin = len(data) - 1
+        if explanationMatch:
+            explanationMatchBegin = explanationMatch.start() - 1
 
-        if not result:
-            raise LeftPanelNoMatchException("</strong> ")
+        input = data[inputMatch.end():outputMatch.start()]
+        output = data[outputMatch.end():explanationMatchBegin]
 
-        return result.group(1)
+        return [input, output]
 
+    def updateDict(self, input: str, output: str) -> None:
+        data = re.split(r",\s*(?![^[]*\])", input)
+        for record in data:
+            name, value = map(str.strip, record.split("=", 1))
+            if name not in self.dict:
+                self.dict[name] = []
+            
+            self.dict[name].append(value)
+        
+        if "output" not in self.dict:
+            self.dict["output"] = []
 
-
-def getTestcases(filepath: str) -> Dict[str, List[str]]:
-    isTestResultTabSet = checkIfTestResultTabSet(filepath)
-    if isTestResultTabSet:
-        amount, variables, values = parseTestResultTab()
-    else:
-        amount, variables, values = parseLeftPanel()
-
-    # amount = getAmount(filepath)
-    # variables = getVariables(filepath)
-    # values = getValues(filepath)
-
-    testcases = handleTestcases(amount, variables, values)
-
-    return testcases
-
-
-def getAmount(filepath: str) -> int:
-    soup = getSoupObject(filepath)
-    divs = soup.find("div", class_="flex flex-wrap items-center gap-x-2 gap-y-4").find_all("button")
-
-    amount = len(divs) - 1
-    return amount 
-
-
-def getVariables(filepath: str) -> List[str]:
-    soup = getSoupObject(filepath)
-    divs = soup.find_all("div", class_="text-xs font-medium text-label-3 dark:text-dark-label-3")
-
-    variables = []
-    for div in divs:
-        text = div.text
-        variable = re.sub(r" =\s*$", "", text)
-        variables.append(variable)
-
-    return variables
-
-
-def getValues(filepath: str) -> List[str]:
-    soup = getSoupObject(filepath)
-    divs = soup.find_all("div", class_="cm-line")
-
-    values = []
-    for div in divs:
-        value = div.text
-        values.append(value)
-
-    return values
-
-
-def handleTestcases(amount: int, variables: List[str], values: List[str]) -> Dict[str, List[str]]:
-    if (amount * len(variables) != len(values)):
-        raise ParseException
-
-
-    testcases = dict()
-    for variable in variables:
-        testcases[variable] = list()
-
-    for i in range(len(values)):
-        testcases[variables[i % len(variables)]].append(values[i])
-
-    return testcases
+        self.dict["output"].append(output)
 
