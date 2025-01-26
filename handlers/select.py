@@ -14,7 +14,7 @@ def getHTMLFiles() -> List[str]:
     file_paths = filedialog.askopenfilenames(
         title="Select files",
         initialdir=last_directory,
-        filetypes=[("HTML files", "*.html")]
+        filetypes=[("MHTML files", "*.mhtml")]
     )
 
 
