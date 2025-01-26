@@ -18,17 +18,37 @@ class Testcases:
         print(self.dict)
 
     def checkIfTestResultTabIsSet(self) -> bool:
-        classname = "flex h-full items-center justify-center text-label-4 dark:text-dark-label-4"
-        div = self.soup.find("div", classname)
+        div = self.soup.find("div", class_="flex h-full items-center " + 
+                "justify-center text-label-4 dark:text-dark-label-4")
         if not div:
             return False
         
         return div.text == "You must run your code first"
 
-    def parseTestResultTab(self) -> Dict[str, List[str]]:
-        print("something")
+    def parseTestResultTab(self) -> None:
+        inputKeys = self.soup.find_all("div", class_="mx-3 mb-2 text-xs " + 
+                "text-label-3 dark:text-dark-label-3")
+        keys = []
+        for key in inputKeys:
+            key = re.sub(r'\s*=\s*$', '', key.text)
+            keys.append(key)
 
-    def parseLeftPanel(self) -> Dict[str, List[str]]:
+        inputValues = self.soup.find("div", class_="cm-editor ͼ1 ͼ3 ͼ4 ͼ4w ͼ2z"
+                ).find_all("div", class_="cm-line")
+        for i in range(len(inputValues)):
+            key = keys[i % len(keys)]
+            if not self.dict[key]:
+                self.dict[key] = []
+
+            self.dict[key].append(inputValues[i].text)
+        
+        self.dict["expected"] = []
+        expectedValues = self.soup.find("div", class_="cm-editor ͼ1 ͼ3 ͼ4 ͼ4y ͼ41"
+                ).find_all("div", class_="cm-line")
+        for value in expectedValues:
+            self.dict["expected"].append(value.text)
+
+    def parseLeftPanel(self) -> None:
         parsedData = dict()
         examples = self.soup.find("div", class_="elfjS").find_all("pre")
         for ex in examples:
