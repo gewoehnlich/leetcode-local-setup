@@ -13,7 +13,7 @@ def showClarificationMessage():
         "1) Open the Leetcode webpage\n" +
         "2) Right click on it and choose \"Save as:\"\n" +
         "3) When saving a file make sure you selected \"Webpage, Single File\"\n" +
-        "If the file is of .mhtml format, then you did everything perfectly fine!"
+        "If the file is of .mhtml format, then you did everything perfectly fine!\n"
     )
 
     print(message)

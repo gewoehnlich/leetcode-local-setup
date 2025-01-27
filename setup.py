@@ -9,7 +9,8 @@ from handlers.compile import compileFile
 
 if __name__ == '__main__':
     showClarificationMessage()
-    html_files = getHTMLFiles()
+    # html_files = getHTMLFiles()
+    html_files = ["/home/gewoehnlich/Downloads/Reverse Integer - LeetCode.mhtml"]
     for filepath in html_files:
         # file = createFile(filepath)
         # code = getCodeTemplate(filepath)

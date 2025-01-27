@@ -21,9 +21,9 @@ class Testcases:
         div = self.soup.find("div", class_="flex h-full items-center " + 
                 "justify-center text-label-4 dark:text-dark-label-4")
         if not div:
-            return False
-        
-        return div.text == "You must run your code first"
+            return True 
+
+        return div.text != "You must run your code first"
 
     def parseTestResultTab(self) -> None:
         inputKeys = self.soup.find_all("div", class_="mx-3 mb-2 text-xs " + 
@@ -32,9 +32,15 @@ class Testcases:
         for key in inputKeys:
             key = re.sub(r'\s*=\s*$', '', key.text)
             keys.append(key)
+        
+        inputValues = self.soup.find(
+            "div", 
+            class_="cm-editor ͼ1 ͼ3 ͼ4 ͼ4w ͼ2z"
+        ).find_all(
+            "div", 
+            class_="cm-line"
+        )
 
-        inputValues = self.soup.find("div", class_="cm-editor ͼ1 ͼ3 ͼ4 ͼ4w ͼ2z"
-                ).find_all("div", class_="cm-line")
         for i in range(len(inputValues)):
             key = keys[i % len(keys)]
             if not self.dict[key]:
