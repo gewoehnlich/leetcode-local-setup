@@ -1,16 +1,13 @@
 {
+    "manifest_version": 3,
+    "version": "1.0",
     "name": "leetcode-local-setup",
     "description": "get local file to solve a leetcode problem in your favorite text editor",
-    "version": "1.0",
-    "manifest_version": 3,
     "action": {
-        "default_popup": "hello.html",
+        "default_popup": "index.html",
         "default_icon": "hello_extensions.png"
     },
     "permissions": [
       "activeTab"
-    ],
-    "background": {
-        "service_worker": "background.js"
-    }
+    ]
 }

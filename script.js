@@ -3,8 +3,7 @@ chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
         const activeTab = tabs[0];
         const url = activeTab.url;
 
-        // Check if the active tab is on LeetCode
-        if (url && url.includes("leetcode.com")) {
+        if (url && url.includes("leetcode.com/problems")) {
             console.log("The active tab is on leetcode.com");
         } else {
             console.log("The active tab is not on leetcode.com");
