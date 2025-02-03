@@ -4,14 +4,13 @@ export async function parseTestcases(html) {
             const parser = new DOMParser();
             const doc = parser.parseFromString(html, "text/html");
             const testcases = {};
-
+            
             if (checkIfTestResultTabIsSet(doc)) {
                 parseTestResultTab(doc, testcases);
             } else {
                 parseLeftPanel(doc, testcases);
             }
 
-            console.dir(testcases);
             resolve(testcases);
         } catch (error) {
             console.error("Error parsing testcases:", error);
@@ -21,31 +20,32 @@ export async function parseTestcases(html) {
 }
 
 function checkIfTestResultTabIsSet(doc) {
-    const div = doc.querySelector("div.flex.h-full.items-center.justify-center.text-label-4.dark\\:text-dark-label-4");
-    return !div || div.textContent.trim() !== "You must run your code first";
+    const editors = doc.querySelectorAll("div.cm-editor");
+    return editors.length >= 2; 
 }
 
 function parseTestResultTab(doc, testcases) {
-    const keys = Array.from(doc.querySelectorAll("div.cm-editor.ͼ1.ͼ3.ͼ4.ͼ50.ͼ2z"))
+    const keys = Array.from(doc.querySelectorAll("div.mx-3.mb-2.text-xs.text-label-3.dark\\:text-dark-label-3"))
         .map(key => key.textContent.replace(/\s*=\s*$/, ''));
-    console.dir(keys);
 
-    //const inputValues = doc.querySelector("div.cm-editor.ͼ1.ͼ3.ͼ4.ͼ4w.ͼ2z")?.querySelectorAll("div.cm-line") || [];
-const inputValues = Array.from(
-    doc.querySelector("div.cm-editor.ͼ1.ͼ3.ͼ4.ͼ4w.ͼ2z")?.querySelectorAll("div.cm-line") || []
-).map(div => div.textContent.trim()); 
-    console.dir(inputValues);
+    const editors = doc.querySelectorAll("div.cm-editor");
+
+    if (!editors[1] || !editors[2]) {
+        console.error("Expected editors[1] and editors[2] to exist.");
+        return;
+    }
+
+    const inputValues = Array.from(editors[1].querySelectorAll("div.cm-line"))
+        .map(div => div.textContent.trim()); 
     
-    inputValues.forEach((div, i) => {
-        console.log(div.textContent);
+    inputValues.forEach((text, i) => {  // `text` is already a string
         const key = keys[i % keys.length];
         if (!testcases[key]) testcases[key] = [];
-        testcases[key].push(div.textContent);
+        testcases[key].push(text);
     });
 
-    testcases["expected"] = Array.from(
-        doc.querySelector("div.cm-editor.ͼ1.ͼ3.ͼ4.ͼ4y.ͼ41")?.querySelectorAll("div.cm-line") || []
-    ).map(div => div.textContent);
+    testcases["expected"] = Array.from(editors[2].querySelectorAll("div.cm-line"))
+        .map(div => div.textContent);
 }
 
 function parseLeftPanel(doc, testcases) {
