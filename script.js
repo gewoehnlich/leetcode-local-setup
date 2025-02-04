@@ -1,9 +1,10 @@
 export {};
 
-import { checkIfActivePageIsLeetcode, getLeetcodePageContent } from "./_handlers/file.js";
-import { parseCodeTemplate } from "./_parsers/template.js";
-import { parseTestcases } from "./_parsers/testcases.js";
-import { getFileFormat } from "./_parsers/fileformat.js";
+import { checkIfActivePageIsLeetcode, getLeetcodePageContent } from "./handlers/file.js";
+import { parseCodeTemplate } from "./parsers/template.js";
+import { parseTestcases } from "./parsers/testcases.js";
+import { getFileFormat } from "./parsers/fileformat.js";
+import { formatTestcases } from "./formatters/format.js";
 
 (async () => {
     const isLeetcodePage = await checkIfActivePageIsLeetcode();
@@ -15,7 +16,7 @@ import { getFileFormat } from "./_parsers/fileformat.js";
     const codeTemplate = await parseCodeTemplate(webpage);
     const parsedTestcases = await parseTestcases(webpage);
     const fileformat = await getFileFormat(webpage);
-    //const testcases = await getTestcases(parsedTestcases, fileformat);
+    const testcases = await formatTestcases(parsedTestcases, fileformat, codeTemplate);
     //const file = await compileFile(codeTemplate, testcases, fileformat);
 })();
 

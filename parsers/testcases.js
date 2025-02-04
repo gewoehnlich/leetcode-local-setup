@@ -10,7 +10,7 @@ export async function parseTestcases(html) {
             } else {
                 parseLeftPanel(doc, testcases);
             }
-
+            
             resolve(testcases);
         } catch (error) {
             console.error("Error parsing testcases:", error);

@@ -4,15 +4,9 @@
     "name": "leetcode-local-setup",
     "description": "get local file to solve a leetcode problem in your favorite text editor",
     "host_permissions": ["https://leetcode.com/problems/*"],
-    "content_scripts": [
-        {
-            "matches": ["https://leetcode.com/problems/*"],
-            "js": ["content.js"]
-        }
-    ],
     "action": {
         "default_popup": "index.html",
-        "default_icon": "hello_extensions.png"
+        "default_icon": "leetcode.png"
     },
     "permissions": [
         "activeTab",
