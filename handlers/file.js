@@ -22,6 +22,11 @@ export async function getLeetcodePageContent() {
                 return;
             }
 
+            const activeTab = tabs[0];
+            const url = activeTab.url;
+            
+            resolve(url.includes("leetcode.com/problems"));
+
             const activeTabId = tabs[0].id;
 
             try {
