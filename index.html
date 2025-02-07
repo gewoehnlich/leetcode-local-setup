@@ -14,14 +14,39 @@
         <!--</header>-->
         
         <main>
-            <div id="settings"></div>
-            <button id="download-file-button" placeholder="download a leetcode problem file"></button>
+            <div id="settings">
+                <label for="create-folder">
+                    create a folder for a file?
+                    <input type="checkbox" id="create-folder" name="create-folder" />
+                </label>
+
+                <label for="file-name">
+                    short name for a file?
+                    <input type="checkbox" id="file-name" name="file-name" />
+                </label>
+
+                <label for="folder-name">
+                    short name for a folder?
+                    <input type="checkbox" id="folder-name" name="folder-name" />
+                </label>
+
+                <label for="store-older-files">
+                    store older files in a separate folder?
+                    <input type="checkbox" id="store-older-files" name="store-older-files" />
+                </label>
+            </div>
+
+            <button id="download-file-button" placeholder="download a leetcode problem file">download a leetcode problem file</button>
             <div id="info"></div>
         </main>
 
         <footer>
             <button id="feedback-button"></button>
             <button id="github-link-button"></button>
+            <select id="language">
+                <option value="english">english</option>
+                <option value="russian">русский</option>
+            </select>
         </footer>
     </div>
 </body>
