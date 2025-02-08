@@ -5,7 +5,7 @@
     "description": "get local file to solve a leetcode problem in your favorite text editor",
     "host_permissions": ["https://leetcode.com/problems/*"],
     "action": {
-        "default_popup": "index.html",
+        "default_popup": "popup.html",
         "default_icon": "leetcode.png"
     },
     "permissions": [

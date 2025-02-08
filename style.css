@@ -18,25 +18,37 @@ body {
 }
 
 main {
+    display: flex;
+    flex-direction: column;
     flex-grow: 1;
+    height: 100vh;
 }
 
 #settings {
     display: flex;
-    flex-direction: column; /* Stack items vertically */
-    gap: 8px; /* Space between rows */
+    flex-direction: column;
+    gap: 8px;
 }
 
 #settings label {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 100%; /* Ensure full width */
-    max-width: 300px; /* Adjust width as needed */
+    width: 100%; 
+    max-width: 300px;
 }
 
 #settings input[type="checkbox"] {
-    margin-left: 10px; /* Space between label and checkbox */
+    margin-left: 10px;
+}
+
+#download-file-button {
+    width: 100%;
+    margin: 10px 0px;
+}
+
+#info {
+    flex-grow: 1;
 }
 
 footer {

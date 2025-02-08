@@ -6,42 +6,43 @@ export async function formatTestcases(parsedTestcases, fileformat, codeTemplate)
         console.log(fileformat);
         console.log(codeTemplate);
 
+        let result;
         switch (fileformat) {
             case ".cpp":
-                const result = formatCpp(parsedTestcases, codeTemplate);
+                result = formatCpp(parsedTestcases, codeTemplate);
                 break;
             case ".java":
-                const result = formatJava(); break;
+                result = formatJava(); break;
             case ".py":
-                const result = formatPy(); break;
+                result = formatPy(); break;
             case ".c": 
-                const result = formatC(); break;
+                result = formatC(); break;
             case ".cs":
-                const result = formatCs(); break;
+                result = formatCs(); break;
             case ".js":
-                const result = formatJs(); break;
+                result = formatJs(); break;
             case ".ts":
-                const result = formatTs(); break;
+                result = formatTs(); break;
             case ".php":
-                const result = formatPhp(); break;
+                result = formatPhp(); break;
             case ".swift":
-                const result = formatSwift(); break;
+                result = formatSwift(); break;
             case ".kt":
-                const result = formatKt(); break;
+                result = formatKt(); break;
             case ".go":
-                const result = formatGo(); break;
+                result = formatGo(); break;
             case ".rb":
-                const result = formatRb(); break;
+                result = formatRb(); break;
             case ".scala":
-                const result = formatScala(); break;
+                result = formatScala(); break;
             case ".rs":
-                const result = formatRs(); break;
+                result = formatRs(); break;
             case ".rkt":
-                const result = formatRkt(); break;
+                result = formatRkt(); break;
             case ".erl":
-                const result = formatErl(); break;
+                result = formatErl(); break;
             case ".ex":
-                const result = formatEx(); break;
+                result = formatEx(); break;
             default:
                 break;
         }
