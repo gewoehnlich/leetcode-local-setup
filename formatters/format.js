@@ -1,4 +1,4 @@
-import { formatCpp } from "./_formatters/cpp/cpp.js";
+import { formatCpp } from "./cpp/cpp.js";
 
 export async function formatTestcases(parsedTestcases, fileformat, codeTemplate) {
     return new Promise((resolve, reject) => {
