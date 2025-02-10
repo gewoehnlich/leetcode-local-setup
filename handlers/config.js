@@ -1,14 +1,5 @@
 
-document.addEventListener("DOMContentLoaded", async () => {
-    await restoreConfig();
-});
-
-document.addEventListener("change", async () => {
-    await saveConfig();
-});
-
-
-async function saveConfig() {
+export async function saveConfig() {
     const storage = typeof browser !== "undefined" ? browser.storage : chrome.storage;
     const ids = [
         "create-folder",
@@ -29,7 +20,7 @@ async function saveConfig() {
 }
 
 
-async function restoreConfig() {
+export async function restoreConfig() {
     const storage = typeof browser !== "undefined" ? browser.storage : chrome.storage;
     const checkboxes = [
         "create-folder",
