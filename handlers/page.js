@@ -1,12 +1,15 @@
+
 import { 
     NoActiveTabError, 
     NotLeetcodeProblemPageError, 
     ParsingError 
 } from "../errors/page.js";
 
-export async function getLeetcodePageContent() {
+import { api } from "./constants.js";
+
+export async function getLeetcodeProblemPageHTML() {
     return new Promise((resolve) => {
-        chrome.tabs.query({ active: true, currentWindow: true }, async (tabs) => {
+        api.tabs.query({ active: true, currentWindow: true }, async (tabs) => {
             if (tabs.length < 1) {
                 throw new NoActiveTabError();
             }
