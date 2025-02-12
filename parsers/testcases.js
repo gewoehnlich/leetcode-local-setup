@@ -1,8 +1,21 @@
+
+import {
+    NoKeysFoundOnTestResultTab,
+    NoNecessaryEditorDivsFound,
+    NoInputValuesAreFound,
+    InputOutputParsingError,
+    ParsingError 
+} from "../errors/testcases.js";
+
 export async function parseTestcases(html) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
         try {
             const parser = new DOMParser();
             const doc = parser.parseFromString(html, "text/html");
+            if (!doc) {
+                throw new ParsingError();
+            }
+
             const testcases = {};
             
             if (checkIfTestResultTabIsSet(doc)) {
@@ -12,9 +25,10 @@ export async function parseTestcases(html) {
             }
             
             resolve(testcases);
-        } catch (error) {
-            console.error("Error parsing testcases:", error);
-            reject(error);
+        } 
+
+        catch (error) {
+            throw new ParsingError();
         }
     });
 }
@@ -25,31 +39,47 @@ function checkIfTestResultTabIsSet(doc) {
 }
 
 function parseTestResultTab(doc, testcases) {
-    const keys = Array.from(doc.querySelectorAll("div.mx-3.mb-2.text-xs.text-label-3.dark\\:text-dark-label-3"))
+    const keys = Array.from(
+        doc.querySelectorAll(
+            "div.mx-3.mb-2.text-xs.text-label-3.dark\\:text-dark-label-3"
+        )
+    )
         .map(key => key.textContent.replace(/\s*=\s*$/, ''));
+
+    if (!keys) {
+        throw new NoKeysFoundOnTestResultTab();
+    }
 
     const editors = doc.querySelectorAll("div.cm-editor");
 
-    if (!editors[1] || !editors[2]) {
-        console.error("Expected editors[1] and editors[2] to exist.");
-        return;
+    if (!editors[1] || !editors[3]) {
+        throw new NoNecessaryEditorDivsFound();
     }
 
-    const inputValues = Array.from(editors[1].querySelectorAll("div.cm-line"))
+    const inputValues = Array.from(
+        editors[1].querySelectorAll("div.cm-line")
+    )
         .map(div => div.textContent.trim()); 
-    
-    inputValues.forEach((text, i) => {  // `text` is already a string
+
+    if (!inputValues) {
+        throw new NoInputValuesAreFound();
+    }
+
+    inputValues.forEach((text, i) => {
         const key = keys[i % keys.length];
         if (!testcases[key]) testcases[key] = [];
         testcases[key].push(text);
     });
 
-    testcases["expected"] = Array.from(editors[2].querySelectorAll("div.cm-line"))
+    testcases["expected"] = Array.from(
+        editors[3].querySelectorAll("div.cm-line")
+    )
         .map(div => div.textContent);
 }
 
 function parseLeftPanel(doc, testcases) {
-    const examples = doc.querySelector("div.elfjS")?.querySelectorAll("pre") || [];
+    const examples = doc.querySelector("div.elfjS").querySelectorAll("pre");
+
     examples.forEach(pre => {
         const [input, output] = parseLeftPanelExample(pre.textContent);
         updateDict(testcases, input, output);
@@ -61,7 +91,7 @@ function parseLeftPanelExample(data) {
     const outputMatch = data.match(/Output: (.*?)(Explanation:|$)/s);
     
     if (!inputMatch || !outputMatch) {
-        throw new Error("Could not parse input/output from left panel.");
+        throw new InputOutputParsingError(); 
     }
     
     return [inputMatch[1].trim(), outputMatch[1].trim()];
@@ -76,6 +106,6 @@ function updateDict(testcases, input, output) {
         testcases[name].push(value);
     });
     
-    if (!testcases["output"]) testcases["output"] = [];
-    testcases["output"].push(output);
+    if (!testcases["expected"]) testcases["expected"] = [];
+    testcases["expected"].push(output);
 }
