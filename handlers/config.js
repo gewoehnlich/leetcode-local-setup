@@ -1,5 +1,5 @@
 
-import { api, checkboxIDs } from "./constants.js";
+import { browserApi, checkboxIDs } from "./constants.js";
 
 export async function saveConfig() {
     const checkboxes = checkboxIDs.map(
@@ -8,7 +8,7 @@ export async function saveConfig() {
     
     await Promise.all(
         Array.from(checkboxes).map((checkbox) => {
-            api.storage.local.set({
+            browserApi.storage.local.set({
                 [checkbox.id]: checkbox.checked
             })
         })
@@ -16,7 +16,7 @@ export async function saveConfig() {
 }
 
 export async function restoreConfig() {
-    const checkboxes = await api.storage.local.get(checkboxIDs);
+    const checkboxes = await browserApi.storage.local.get(checkboxIDs);
 
     await Promise.all(
         Object.entries(checkboxes).map(([key, value]) => {

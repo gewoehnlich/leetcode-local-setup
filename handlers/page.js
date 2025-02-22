@@ -5,11 +5,11 @@ import {
     ParsingError 
 } from "../errors/page.js";
 
-import { api } from "./constants.js";
+import { browserApi } from "./constants.js";
 
-export async function getLeetcodeProblemPageHTML() {
+export async function parseProps() {
     return new Promise((resolve) => {
-        api.tabs.query({ active: true, currentWindow: true }, async (tabs) => {
+        browserApi.tabs.query({ active: true, currentWindow: true }, async (tabs) => {
             if (tabs.length < 1) {
                 throw new NoActiveTabError();
             }
@@ -34,7 +34,24 @@ export async function getLeetcodeProblemPageHTML() {
                 }
                 
                 const page = results[0].result;
-                resolve(page); 
+
+				const parser = new DOMParser();
+				const doc = parser.parseFromString(page, "text/html");
+				const props = doc.getElementById("__NEXT_DATA__").textContent.trim();
+
+				// try {
+				//   const parsedData = JSON.parse(props);
+				//   console.dir(parsedData.props); // "test"
+				// } catch (error) {
+				//   console.error("Fix needed:", error);
+				// }
+				// // console.log(props);
+				// console.log(JSON.stringify(props));
+				// console.log(props.charCodeAt(0));
+				// console.log(props.charCodeAt(1));
+				//             resolve(JSON.stringify(props)); 
+				// console.dir(JSON.parse(props));
+				resolve(JSON.parse(props));
             } 
 
             catch (error) {

@@ -2,7 +2,7 @@
     "manifest_version": 3,
     "version": "1.0",
     "name": "leetcode-local-setup",
-    "description": "get local file to solve a leetcode problem in your favorite text editor",
+    "description": "get a local file to solve a leetcode problem in your favorite text editor",
     "host_permissions": ["https://leetcode.com/problems/*"],
     "action": {
         "default_popup": "popup.html",
@@ -12,6 +12,5 @@
         "activeTab",
         "scripting",
         "downloads",
-        "storage"
     ]
 }
