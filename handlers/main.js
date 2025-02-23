@@ -20,12 +20,8 @@ export async function main() {
 
 	lls.fileformat = parser.fileformat;
 
-	const testcases = new Testcases(
-		lls.exampleTestcaseList, 
-		lls.metadata, 
-		lls.fileformat
-	);
+	lls.compile();
 
-	lls.compileFile();
+	lls.download();
 }
 

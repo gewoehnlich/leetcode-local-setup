@@ -19,73 +19,99 @@
 
 export class Testcases {
 	constructor(
-		exampleTestcaseList,
+		testcases,
 		metadata,
 		fileformat
 	) {
-		this.exampleTestcaseList = exampleTestcaseList;
-		this.metadata = metadata;
-		this.fileformat = fileformat;
+		this.testcases   =  testcases;
+		this.metadata    =  metadata;
+		this.fileformat  =  fileformat;
+
+		console.log(
+			this.testcases,
+			this.datatypes,
+			this.fileformat
+		);
+
+		// return this.format();
 	}
 
 	format() {
-		//       let result;
-		//       switch (this.fileformat) {
-		//           case "cpp":
-		//               result = formatCpp(parsedTestcases, codeTemplate);
-		//               break;
-		//           case "java":
-		//               result = formatJava(); 
-		// 		break;
-		//           case "py":
-		//               result = formatPy(); 
-		// 		break;
-		//           case "c": 
-		//               result = formatC(); 
-		// 		break;
-		//           case "cs":
-		//               result = formatCs(); 
-		// 		break;
-		//           case "js":
-		//               result = formatJs(); 
-		// 		break;
-		//           case "ts":
-		//               result = formatTs(); 
-		// 		break;
-		//           case "php":
-		//               result = formatPhp(); 
-		// 		break;
-		//           case "swift":
-		//               result = formatSwift(); 
-		// 		break;
-		//           case "kt":
-		//               result = formatKt(); 
-		// 		break;
-		//           case "go":
-		//               result = formatGo(); 
-		// 		break;
-		//           case "rb":
-		//               result = formatRb(); 
-		// 		break;
-		//           case "scala":
-		//               result = formatScala(); 
-		// 		break;
-		//           case "rs":
-		//               result = formatRs(); 
-		// 		break;
-		//           case "rkt":
-		//               result = formatRkt(); 
-		// 		break;
-		//           case "erl":
-		//               result = formatErl(); 
-		// 		break;
-		//           case "ex":
-		//               result = formatEx(); 
-		// 		break;
-		//           default:
-		//               break;
-		//       }
+		let result;
+		// switch (this.fileformat) {
+		// case "cpp":
+		// 	result = formatCpp(this.testcases, this.metadata);
+		// 	break;
 		//
+		// case "java":
+		// 	result = formatJava(this.testcases, this.metadata); 
+		// 	break;
+		//
+		// case "py":
+		// 	result = formatPy(this.testcases, this.metadata); 
+		// 	break;
+		//
+		// case "c": 
+		// 	result = formatC(this.testcases, this.metadata); 
+		// 	break;
+		//
+		// case "cs":
+		// 	result = formatCs(this.testcases, this.metadata); 
+		// 	break;
+		//
+		// case "js":
+		// 	result = formatJs(this.testcases, this.metadata); 
+		// 	break;
+		//
+		// case "ts":
+		// 	result = formatTs(this.testcases, this.metadata); 
+		// 	break;
+		//
+		// case "php":
+		// 	result = formatPhp(this.testcases, this.metadata); 
+		// 	break;
+		//
+		// case "swift":
+		// 	result = formatSwift(this.testcases, this.metadata); 
+		// 	break;
+		//
+		// case "kt":
+		// 	result = formatKt(this.testcases, this.metadata); 
+		// 	break;
+		//
+		// case "go":
+		// 	result = formatGo(this.testcases, this.metadata); 
+		// 	break;
+		//
+		// case "rb":
+		// 	result = formatRb(this.testcases, this.metadata); 
+		// 	break;
+		//
+		// case "scala":
+		// 	result = formatScala(this.testcases, this.metadata); 
+		// 	break;
+		//
+		// case "rs":
+		// 	result = formatRs(this.testcases, this.metadata); 
+		// 	break;
+		//
+		// case "rkt":
+		// 	result = formatRkt(this.testcases, this.metadata); 
+		// 	break;
+		//
+		// case "erl":
+		// 	result = formatErl(this.testcases, this.metadata); 
+		// 	break;
+		//
+		// case "ex":
+		// 	result = formatEx(this.testcases, this.metadata); 
+		// 	break;
+		//
+		// default:
+		// 	break;
+
+		// }
+
 		// return result;
 	}
 }

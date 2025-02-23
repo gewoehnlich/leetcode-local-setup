@@ -1,4 +1,6 @@
 
+import { browserApi } from "./constants.js";
+
 export class LeetcodeLocalSetup {
 	constructor(props) {
 		const queries = props["props"]["pageProps"]["dehydratedState"]["queries"];
@@ -17,10 +19,81 @@ export class LeetcodeLocalSetup {
 		this.code = null;
 		this.testcases = null;
 		this.fileformat = null;
+		
+		this.filename = null;
+		this.content = "";
 	}
 
-	compileFile() {
+	getHeaders() {
+		const hashmap = new Map();
+		hashmap.set("cpp", "#include \"leetcode_headers_cpp.h\"");
 
+		if (hashmap.get(this.fileformat)) {
+			return hashmap.get(this.fileformat);
+		}
+
+		return null;
+	}
+
+	compile() {
+		// console.log(
+		// 	"activeSessionId: " + this.activeSessionId + "\n",
+		// 	"questionTitle: " + this.questionTitle + "\n",
+		// 	"questionId: " + this.questionId + "\n",
+		// 	"questionFrontendId: " + this.questionFrontendId + "\n",
+		// 	"metadata: " + this.metadata + "\n",
+		// 	"codeSnippets: " + this.codeSnippets + "\n",
+		// 	"exampleTestcaseList: " + this.exampleTestcaseList + "\n",
+		// 	"titleSlug: " + this.titleSlug + "\n",
+		// 	"code: " + this.code + "\n",
+		// 	"testcases: " + this.testcases + "\n",
+		// 	"fileformat: " + this.fileformat + "\n",
+		// );
+		
+		const headers = this.getHeaders();
+
+		// const testcases = new Testcases(
+		// 	lls.testcases || lls.exampleTestcaseList, 
+		// 	lls.metadata, 
+		// 	lls.fileformat
+		// );
+
+		const testcases = this.testcases;
+
+		const array = new Array(
+			headers, 
+			this.code, 
+			testcases
+		);
+
+		array.forEach((element) => {
+			if (element) {
+				const lines = element.replace(/^"|"$/g, '').split("\\n");
+				lines.forEach(line => {
+					this.content += line + "\n";
+				});
+
+				this.content += "\n";
+			}
+		});
+
+		this.filename = this.questionFrontendId 
+			+ ". " + this.questionTitle + "." + this.fileformat;
+	}
+
+	download() {
+		const blob = new Blob([this.content], { type: "text/plain" });
+		const url = URL.createObjectURL(blob);
+		
+		const link = document.createElement("a");
+		link.href = url;
+		link.download = this.filename;
+
+		document.body.appendChild(link);
+		link.click();
+
+		document.body.removeChild(link);
+		URL.revokeObjectURL(url);
 	}
 }
 
