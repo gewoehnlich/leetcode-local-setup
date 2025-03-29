@@ -1,5 +1,5 @@
 
-// import { formatCpp } from "./cpp/cpp.js";
+import { formatCpp } from "./cpp/cpp.js";
 // import { formatJava } from "./java/java.js";
 // import { formatPy } from "./python/py.js";
 // import { formatC } from "./c/c.js";
@@ -20,29 +20,30 @@
 export class Testcases {
 	constructor(
 		testcases,
+        exampleTestcasesList,
 		metadata,
 		fileformat
 	) {
-		this.testcases   =  testcases;
-		this.metadata    =  metadata;
-		this.fileformat  =  fileformat;
+		this.testcases = testcases;
+        this.exampleTestcasesList = exampleTestcasesList;
+		this.metadata = metadata;
+		this.fileformat = fileformat;
 
 		console.log(
 			this.testcases,
+            this.exampleTestcasesList,
 			this.datatypes,
 			this.fileformat
 		);
-
-		// return this.format();
 	}
 
 	format() {
 		let result;
-		// switch (this.fileformat) {
-		// case "cpp":
-		// 	result = formatCpp(this.testcases, this.metadata);
-		// 	break;
-		//
+		switch (this.fileformat) {
+		case "cpp":
+			result = formatCpp(this.testcases, this.metadata);
+			break;
+
 		// case "java":
 		// 	result = formatJava(this.testcases, this.metadata); 
 		// 	break;
@@ -107,12 +108,14 @@ export class Testcases {
 		// 	result = formatEx(this.testcases, this.metadata); 
 		// 	break;
 		//
-		// default:
-		// 	break;
+		default:
+			break;
 
-		// }
+		}
 
-		// return result;
+        console.dir(result);
+
+		return result;
 	}
 }
 

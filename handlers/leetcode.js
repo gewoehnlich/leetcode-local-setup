@@ -1,5 +1,6 @@
 
 import { browserApi } from "./constants.js";
+import { Testcases } from "../testcases/testcases.js";
 
 export class LeetcodeLocalSetup {
 	constructor(props) {
@@ -26,7 +27,7 @@ export class LeetcodeLocalSetup {
 
 	getHeaders() {
 		const hashmap = new Map();
-		hashmap.set("cpp", "#include \"leetcode_headers_cpp.h\"");
+		hashmap.set("cpp", "#include \"leetcode_headers_cpp.h\"\"");
 
 		if (hashmap.get(this.fileformat)) {
 			return hashmap.get(this.fileformat);
@@ -52,13 +53,12 @@ export class LeetcodeLocalSetup {
 		
 		const headers = this.getHeaders();
 
-		// const testcases = new Testcases(
-		// 	lls.testcases || lls.exampleTestcaseList, 
-		// 	lls.metadata, 
-		// 	lls.fileformat
-		// );
-
-		const testcases = this.testcases;
+		const testcases = new Testcases(
+			this.testcases,
+            this.exampleTestcaseList, 
+			this.metadata, 
+			this.fileformat
+		).format();
 
 		const array = new Array(
 			headers, 
@@ -68,6 +68,7 @@ export class LeetcodeLocalSetup {
 
 		array.forEach((element) => {
 			if (element) {
+                console.log(element);
 				const lines = element.replace(/^"|"$/g, '').split("\\n");
 				lines.forEach(line => {
 					this.content += line + "\n";

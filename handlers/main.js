@@ -6,7 +6,6 @@ import { Testcases } from "../testcases/testcases.js";
 export async function main() {
 	const parser = new Parser();
 	await parser.init();
-	console.log(parser.activeTabId);
 
 	const lls = new LeetcodeLocalSetup(parser.props);
 	lls.code = await parser.getLocalStorageCode(

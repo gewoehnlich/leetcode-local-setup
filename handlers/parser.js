@@ -58,7 +58,11 @@ export class Parser {
 				this.doc = parser.parseFromString(page, "text/html");
 			}
 
-			const props = this.doc.getElementById("__NEXT_DATA__").textContent.trim();
+			const props = this.doc
+                .getElementById("__NEXT_DATA__")
+                .textContent
+                .trim();
+
 			const json = JSON.parse(props);
 
 			return json;
@@ -72,14 +76,16 @@ export class Parser {
 
 	async getFileFormat() {
 		return new Promise((resolve) => {
-			const button = this.doc.querySelector("div#editor").querySelector("button");
+			const buttons = this.doc
+                .querySelector("div#editor")
+                .querySelectorAll("button");
 
-			if (!button) {
+			if (!buttons) {
 				resolve(null);
 				return;
 			}
 
-			const language = button.textContent.trim();
+			const language = buttons[1].textContent.trim();
 			let fileformat = null;
 
 			switch (language) {
@@ -102,12 +108,11 @@ export class Parser {
 				case "Racket": fileformat = "rkt"; break;
 				case "Erlang": fileformat = "erl"; break;
 				case "Elixir": fileformat = "ex"; break;
-				default: fileformat = null;
+				default: fileformat = "txt";
 			}
 
-			console.log(fileformat);
-
 			resolve(fileformat);
+
 		});
 	}
 
