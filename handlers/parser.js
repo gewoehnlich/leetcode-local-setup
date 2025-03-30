@@ -5,25 +5,27 @@ import {
     ParsingError 
 } from "../errors/page.js";
 
-import { browserApi } from "./constants.js";
+import { 
+    browserApi
+} from "./constants.js";
 
-export class Parser {
+export class WebpageParser {
 	constructor() {
 		this.activeTabId = null;
 		this.props = null;
-		this.doc = null;
-		this.fileformat = null;
 	}
 
 	async init() {
 		this.activeTabId = await this.getActiveTabId();
 		this.props = await this.parseProps();
-		this.fileformat = await this.getFileFormat();
 	}
 
 	async getActiveTabId() {
 		return new Promise((resolve) => {
-			browserApi.tabs.query({ active: true, currentWindow: true }, async (tabs) => {
+			browserApi.tabs.query({
+                active: true, 
+                currentWindow: true 
+            }, async (tabs) => {
 				if (tabs.length < 1) {
 					throw new NoActiveTabError();
 				}
@@ -52,13 +54,11 @@ export class Parser {
 			}
 			
 			const page = results[0].result;
-			
-			if (!this.doc) {
-				const parser = new DOMParser();
-				this.doc = parser.parseFromString(page, "text/html");
-			}
 
-			const props = this.doc
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(page, "text/html");
+
+			const props = doc
                 .getElementById("__NEXT_DATA__")
                 .textContent
                 .trim();
@@ -74,51 +74,30 @@ export class Parser {
 		}
 	}
 
-	async getFileFormat() {
-		return new Promise((resolve) => {
-			const buttons = this.doc
-                .querySelector("div#editor")
-                .querySelectorAll("button");
+	async getLocalStorageLanguage(questionId, activeSessionId) {
+		const key = `${questionId}_${activeSessionId}_lang`;
 
-			if (!buttons) {
-				resolve(null);
-				return;
+		const [result] = await browserApi.scripting.executeScript({
+			target: { tabId: this.activeTabId },
+			args: [key],
+			func: (injectedKey) => {
+				for (let i = 0; i < window.localStorage.length; ++i) {
+					const storedKey = window.localStorage.key(i);
+					if (injectedKey == storedKey) {
+						return window.localStorage.getItem(injectedKey);
+					}
+				}
+
+				return null;
 			}
-
-			const language = buttons[1].textContent.trim();
-			let fileformat = null;
-
-			switch (language) {
-				case "C++": fileformat = "cpp"; break;
-				case "Java": fileformat = "java"; break;
-				case "Python":
-				case "Python3": fileformat = "py"; break;
-				case "C": fileformat = "c"; break;
-				case "C#": fileformat = "cs"; break;
-				case "JavaScript": fileformat = "js"; break;
-				case "TypeScript": fileformat = "ts"; break;
-				case "PHP": fileformat = "php"; break;
-				case "Swift": fileformat = "swift"; break;
-				case "Kotlin": fileformat = "kt"; break;
-				case "Dart": fileformat = "dart"; break;
-				case "Go": fileformat = "go"; break;
-				case "Ruby": fileformat = "rb"; break;
-				case "Scala": fileformat = "scala"; break;
-				case "Rust": fileformat = "rs"; break;
-				case "Racket": fileformat = "rkt"; break;
-				case "Erlang": fileformat = "erl"; break;
-				case "Elixir": fileformat = "ex"; break;
-				default: fileformat = "txt";
-			}
-
-			resolve(fileformat);
-
 		});
+
+		return result?.result || null;
+
 	}
-
-
-	async getLocalStorageCode(questionId, activeSessionId) {
-		const key = `${questionId}_${activeSessionId}_${this.fileformat}`;
+    
+	async getLocalStorageCode(questionId, activeSessionId, fileformat) {
+		const key = `${questionId}_${activeSessionId}_${fileformat}`;
 
 		const [result] = await browserApi.scripting.executeScript({
 			target: { tabId: this.activeTabId },

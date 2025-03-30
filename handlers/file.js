@@ -1,10 +1,16 @@
 
-import { browserApi } from "./constants.js";
+import { 
+    browserApi,
+    fileformatMap,
+    headersMap
+} from "./constants.js";
+
 import { Testcases } from "../testcases/testcases.js";
 
-export class LeetcodeLocalSetup {
+export class FileCompiler {
 	constructor(props) {
-		const queries = props["props"]["pageProps"]["dehydratedState"]["queries"];
+		const queries = props
+            ["props"]["pageProps"]["dehydratedState"]["queries"];
 		const secondQuery = queries[1]["state"]["data"]["question"];
 
 		this.activeSessionId = queries[0]["state"]["data"]
@@ -19,45 +25,20 @@ export class LeetcodeLocalSetup {
 
 		this.code = null;
 		this.testcases = null;
+        this.language = null;
 		this.fileformat = null;
 		
 		this.filename = null;
 		this.content = "";
 	}
 
-	getHeaders() {
-		const hashmap = new Map();
-		hashmap.set("cpp", "#include \"leetcode_headers_cpp.h\"\"");
-
-		if (hashmap.get(this.fileformat)) {
-			return hashmap.get(this.fileformat);
-		}
-
-		return null;
-	}
-
 	compile() {
-		// console.log(
-		// 	"activeSessionId: " + this.activeSessionId + "\n",
-		// 	"questionTitle: " + this.questionTitle + "\n",
-		// 	"questionId: " + this.questionId + "\n",
-		// 	"questionFrontendId: " + this.questionFrontendId + "\n",
-		// 	"metadata: " + this.metadata + "\n",
-		// 	"codeSnippets: " + this.codeSnippets + "\n",
-		// 	"exampleTestcaseList: " + this.exampleTestcaseList + "\n",
-		// 	"titleSlug: " + this.titleSlug + "\n",
-		// 	"code: " + this.code + "\n",
-		// 	"testcases: " + this.testcases + "\n",
-		// 	"fileformat: " + this.fileformat + "\n",
-		// );
-		
-		const headers = this.getHeaders();
-
+		const headers = headersMap.get(this.language);
 		const testcases = new Testcases(
 			this.testcases,
             this.exampleTestcaseList, 
 			this.metadata, 
-			this.fileformat
+			this.language
 		).format();
 
 		const array = new Array(
@@ -78,8 +59,10 @@ export class LeetcodeLocalSetup {
 			}
 		});
 
+        const fileformat = fileformatMap.get(this.language);
+
 		this.filename = this.questionFrontendId 
-			+ ". " + this.questionTitle + "." + this.fileformat;
+			+ ". " + this.questionTitle + "." + fileformat;
 	}
 
 	download() {

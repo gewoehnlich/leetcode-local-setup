@@ -1,3 +1,4 @@
+
 export const browserApi = typeof browser !== "undefined" ? browser : chrome;
 export const checkboxIDs = [
     "create-folder",
@@ -5,3 +6,48 @@ export const checkboxIDs = [
     "folder-name",
     "store-older-files"
 ];
+
+export const fileformatMap = new Map([
+    [`"cpp"`, "cpp"],
+    [`"java"`, "java"],
+    [`"python"`, "py"],
+    [`"python3"`, "py"],
+    [`"c"`, "c"],
+    [`"csharp"`, "cs"],
+    [`"javascript"`, "js"],
+    [`"typescript"`, "ts"],
+    [`"php"`, "php"],
+    [`"swift"`, "swift"],
+    [`"kotlin"`, "kt"],
+    [`"dart"`, "dart"],
+    [`"golang"`, "go"],
+    [`"ruby"`, "rb"],
+    [`"scala"`, "scala"],
+    [`"rust"`, "rs"],
+    [`"racket"`, "rkt"],
+    [`"erlang"`, "erl"],
+    [`"elixir"`, "ex"]
+]);
+
+export const headersMap = new Map([
+    [`"cpp"`, "#include \"leetcode_headers_cpp.h\"\""],
+    [`"java"`, ""],
+    [`"python"`, "import leetcode_headers"],
+    [`"python3"`, ""],
+    [`"c"`, "#include \"leetcode_headers_c.h\"\""],
+    [`"csharp"`, ""],
+    [`"javascript"`, ""],
+    [`"typescript"`, ""],
+    [`"php"`, ""],
+    [`"swift"`, ""],
+    [`"kotlin"`, ""],
+    [`"dart"`, ""],
+    [`"golang"`, ""],
+    [`"ruby"`, ""],
+    [`"scala"`, ""],
+    [`"rust"`, ""],
+    [`"racket"`, ""],
+    [`"erlang"`, ""],
+    [`"elixir"`, ""]
+]);
+

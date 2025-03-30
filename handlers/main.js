@@ -1,26 +1,33 @@
 
-import { Parser } from "./parser.js";
-import { LeetcodeLocalSetup } from "./leetcode.js";
+import { WebpageParser } from "./parser.js";
+import { FileCompiler } from "./file.js";
 import { Testcases } from "../testcases/testcases.js";
 
 export async function main() {
-	const parser = new Parser();
+	const parser = new WebpageParser();
 	await parser.init();
 
-	const lls = new LeetcodeLocalSetup(parser.props);
-	lls.code = await parser.getLocalStorageCode(
-		lls.questionId, 
-		lls.activeSessionId
+	const fc = new FileCompiler(parser.props);
+
+    fc.language = await parser.getLocalStorageLanguage(
+        fc.questionId,
+        fc.activeSessionId
+    );
+
+    console.log(fc.language);
+
+	fc.code = await parser.getLocalStorageCode(
+		fc.questionId, 
+		fc.activeSessionId,
+        fc.fileformat
 	);
 
-	lls.testcases = await parser.getSessionStorageTestcases(
-		lls.titleSlug
+	fc.testcases = await parser.getSessionStorageTestcases(
+		fc.titleSlug
 	);
 
-	lls.fileformat = parser.fileformat;
+	fc.compile();
 
-	lls.compile();
-
-	lls.download();
+	fc.download();
 }
 
