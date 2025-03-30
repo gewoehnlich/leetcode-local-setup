@@ -6,7 +6,8 @@ import {
 } from "../errors/page.js";
 
 import { 
-    browserApi
+    browserApi,
+    fileformatMap
 } from "./constants.js";
 
 export class WebpageParser {
@@ -96,8 +97,10 @@ export class WebpageParser {
 
 	}
     
-	async getLocalStorageCode(questionId, activeSessionId, fileformat) {
+	async getLocalStorageCode(questionId, activeSessionId, language) {
+        const fileformat = fileformatMap.get(language);
 		const key = `${questionId}_${activeSessionId}_${fileformat}`;
+        console.log(key);
 
 		const [result] = await browserApi.scripting.executeScript({
 			target: { tabId: this.activeTabId },

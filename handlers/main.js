@@ -1,7 +1,6 @@
 
 import { WebpageParser } from "./parser.js";
 import { FileCompiler } from "./file.js";
-import { Testcases } from "../testcases/testcases.js";
 
 export async function main() {
 	const parser = new WebpageParser();
@@ -14,12 +13,10 @@ export async function main() {
         fc.activeSessionId
     );
 
-    console.log(fc.language);
-
 	fc.code = await parser.getLocalStorageCode(
 		fc.questionId, 
 		fc.activeSessionId,
-        fc.fileformat
+        fc.language
 	);
 
 	fc.testcases = await parser.getSessionStorageTestcases(

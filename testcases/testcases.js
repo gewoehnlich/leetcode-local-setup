@@ -39,8 +39,8 @@ export class Testcases {
 
 	format() {
 		let result;
-		switch (this.fileformat) {
-		case "cpp":
+		switch (this.language) {
+		case `"cpp"`:
 			result = formatCpp(this.testcases, this.metadata);
 			break;
 		// case "java":
