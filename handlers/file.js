@@ -49,7 +49,7 @@ export class FileCompiler {
 
 		array.forEach((element) => {
 			if (element) {
-                console.log(element);
+                // console.log(element);
 				const lines = element.replace(/^"|"$/g, '').split("\\n");
 				lines.forEach(line => {
 					this.content += line + "\n";

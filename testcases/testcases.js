@@ -29,12 +29,12 @@ export class Testcases {
 		this.metadata = metadata;
 		this.language = language;
 
-		console.log(
-			this.testcases,
-            this.exampleTestcasesList,
-			this.metadata,
-			this.language
-		);
+		//console.log(
+		//	this.testcases,
+		//          this.exampleTestcasesList,
+		//	this.metadata,
+		//	this.language
+		//);
 	}
 
 	format() {
@@ -95,7 +95,7 @@ export class Testcases {
 			break;
 		}
 
-        console.dir(result);
+        //console.dir(result);
 
 		return result;
 	}
