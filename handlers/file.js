@@ -1,83 +1,72 @@
+import { fileformatMap, headersMap } from './constants.js';
 
-import { 
-    browserApi,
-    fileformatMap,
-    headersMap
-} from "./constants.js";
-
-import { Testcases } from "../testcases/testcases.js";
+import { Testcases } from '../testcases/testcases.js';
 
 export class FileCompiler {
-	constructor(props) {
-		const queries = props
-            ["props"]["pageProps"]["dehydratedState"]["queries"];
-		const secondQuery = queries[1]["state"]["data"]["question"];
+  constructor(props) {
+    const queries = props['props']['pageProps']['dehydratedState']['queries'];
+    const secondQuery = queries[1]['state']['data']['question'];
 
-		this.activeSessionId = queries[0]["state"]["data"]
-			["userStatus"]["activeSessionId"];
-		this.questionTitle        =  secondQuery["questionTitle"];
-		this.questionId           =  secondQuery["questionId"];
-		this.questionFrontendId   =  secondQuery["questionFrontendId"];
-		this.metadata             =  secondQuery["metaData"];
-		this.codeSnippets         =  secondQuery["codeSnippets"];
-		this.exampleTestcaseList  =  secondQuery["exampleTestcaseList"];
-		this.titleSlug            =  secondQuery["titleSlug"];
+    this.activeSessionId =
+      queries[0]['state']['data']['userStatus']['activeSessionId'];
+    this.questionTitle = secondQuery['questionTitle'];
+    this.questionId = secondQuery['questionId'];
+    this.questionFrontendId = secondQuery['questionFrontendId'];
+    this.metadata = secondQuery['metaData'];
+    this.codeSnippets = secondQuery['codeSnippets'];
+    this.exampleTestcaseList = secondQuery['exampleTestcaseList'];
+    this.titleSlug = secondQuery['titleSlug'];
 
-		this.code = null;
-		this.testcases = null;
-        this.language = null;
-		this.fileformat = null;
-		
-		this.filename = null;
-		this.content = "";
-	}
+    this.code = null;
+    this.testcases = null;
+    this.language = null;
+    this.fileformat = null;
 
-	compile() {
-		const headers = headersMap.get(this.language);
-		const testcases = new Testcases(
-			this.testcases,
-            this.exampleTestcaseList, 
-			this.metadata, 
-			this.language
-		).format();
+    this.filename = null;
+    this.content = '';
+  }
 
-		const array = new Array(
-			headers, 
-			this.code, 
-			testcases
-		);
+  compile() {
+    const headers = headersMap.get(this.language);
+    const testcases = new Testcases(
+      this.testcases,
+      this.exampleTestcaseList,
+      this.metadata,
+      this.language
+    ).format();
 
-		array.forEach((element) => {
-			if (element) {
-                // console.log(element);
-				const lines = element.replace(/^"|"$/g, '').split("\\n");
-				lines.forEach(line => {
-					this.content += line + "\n";
-				});
+    const array = new Array(headers, this.code, testcases);
 
-				this.content += "\n";
-			}
-		});
+    array.forEach((element) => {
+      if (element) {
+        // console.log(element);
+        const lines = element.replace(/^"|"$/g, '').split('\\n');
+        lines.forEach((line) => {
+          this.content += line + '\n';
+        });
 
-        const fileformat = fileformatMap.get(this.language);
+        this.content += '\n';
+      }
+    });
 
-		this.filename = this.questionFrontendId 
-			+ ". " + this.questionTitle + "." + fileformat;
-	}
+    const fileformat = fileformatMap.get(this.language);
 
-	download() {
-		const blob = new Blob([this.content], { type: "text/plain" });
-		const url = URL.createObjectURL(blob);
-		
-		const link = document.createElement("a");
-		link.href = url;
-		link.download = this.filename;
+    this.filename =
+      this.questionFrontendId + '. ' + this.questionTitle + '.' + fileformat;
+  }
 
-		document.body.appendChild(link);
-		link.click();
+  download() {
+    const blob = new Blob([this.content], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
 
-		document.body.removeChild(link);
-		URL.revokeObjectURL(url);
-	}
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = this.filename;
+
+    document.body.appendChild(link);
+    link.click();
+
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  }
 }
-
