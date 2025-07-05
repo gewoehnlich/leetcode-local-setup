@@ -1,77 +1,66 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>leetcode-local-setup</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css" />
     <script type="module" src="script.js"></script>
-<body>
+  </head>
+  <body>
     <div id="container">
-        <main>
-            <div id="settings">
-                <label for="create-folder">
-                    create a folder for a file?
-                    <input 
-						type="checkbox" 
-						id="create-folder" 
-						name="create-folder" 
-					/>
-                </label>
+      <main>
+        <div id="settings">
+          <label for="create-folder">
+            create a folder for a file?
+            <input type="checkbox" id="create-folder" name="create-folder" />
+          </label>
 
-                <label for="file-name">
-                    short name for a file?
-                    <input 
-						type="checkbox" 
-						id="file-name" 
-						name="file-name" 
-					/>
-                </label>
+          <label for="file-name">
+            short name for a file?
+            <input type="checkbox" id="file-name" name="file-name" />
+          </label>
 
-                <label for="folder-name">
-                    short name for a folder?
-                    <input 
-						type="checkbox" 
-						id="folder-name" 
-						name="folder-name" 
-					/>
-                </label>
+          <label for="folder-name">
+            short name for a folder?
+            <input type="checkbox" id="folder-name" name="folder-name" />
+          </label>
 
-                <label for="store-older-files">
-                    store older files in a separate folder?
-                    <input 
-						type="checkbox" 
-						id="store-older-files" 
-						name="store-older-files" 
-					/>
-                </label>
-            </div>
+          <label for="store-older-files">
+            store older files in a separate folder?
+            <input
+              type="checkbox"
+              id="store-older-files"
+              name="store-older-files"
+            />
+          </label>
+        </div>
 
-            <button 
-				id="download-file-button" 
-				placeholder="download a leetcode problem file">
-				download a leetcode problem file
-			</button>
+        <button
+          id="download-file-button"
+          placeholder="download a leetcode problem file"
+        >
+          download a leetcode problem file
+        </button>
 
-            <button 
-				id="paste-code-from-file" 
-				placeholder="paste code from a local file">
-				paste the code from a local file
-			</button>
+        <button
+          id="paste-code-from-file"
+          placeholder="paste code from a local file"
+        >
+          paste the code from a local file
+        </button>
 
-            <div id="info">
-                test message
-            </div>
-        </main>
+        <div id="info">test message</div>
+      </main>
 
-        <footer>
-            <button id="feedback-button"></button>
-            <button id="github-link-button"></button>
-            <select id="language">
-                <option value="english">english</option>
-                <option value="russian">русский</option>
-            </select>
-        </footer>
+      <footer>
+        <button id="feedback-button"></button>
+        <button id="github-link-button"></button>
+        <select id="language">
+          <option value="english">english</option>
+          <option value="russian">русский</option>
+        </select>
+      </footer>
     </div>
-</body>
+  </body>
 </html>
