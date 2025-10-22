@@ -12,12 +12,10 @@ import {
 export class WebpageParser {
   constructor() {
     this.activeTabId = null;
-    this.props = null;
   }
 
   async init() {
     this.activeTabId = await this.setActiveTabId();
-    this.props = await this.setProps();
   }
 
   async setActiveTabId() {
@@ -45,7 +43,7 @@ export class WebpageParser {
     });
   }
 
-  async setProps() {
+  async props() {
     try {
       const results = await browserApi.scripting.executeScript({
         target: { tabId: this.activeTabId },
@@ -93,7 +91,11 @@ export class WebpageParser {
     return result?.result || null;
   }
 
-  async code(questionId, activeSessionId, language) {
+  async code(
+    questionId, 
+    activeSessionId, 
+    language,
+  ) {
     const fileformat = fileformatMap.get(language);
     const key = `${questionId}_${activeSessionId}_${fileformat}`;
 
@@ -101,14 +103,34 @@ export class WebpageParser {
       target: { tabId: this.activeTabId },
       args: [key],
       func: (injectedKey) => {
-        for (let i = 0; i < window.localStorage.length; ++i) {
-          const storedKey = window.localStorage.key(i);
-          if (injectedKey == storedKey) {
-            return window.localStorage.getItem(injectedKey);
-          }
-        }
-
-        return null;
+        return new Promise((resolve) => {
+          const request = indexedDB.open('LeetCode-problems');
+          request.onerror = (event) => {
+            console.error('IndexedDB error:', event);
+            resolve(null);
+          };
+          request.onsuccess = (event) => {
+            const db = event.target.result;
+            if (!db.objectStoreNames.contains('problem_code')) {
+              resolve(null);
+              return;
+            }
+            const transaction = db.transaction(['problem_code'], 'readonly');
+            const objectStore = transaction.objectStore('problem_code');
+            const getRequest = objectStore.get(injectedKey);
+            getRequest.onsuccess = () => {
+              if (getRequest.result && getRequest.result.code) {
+                resolve(getRequest.result.code);
+              } else {
+                resolve(null);
+              }
+            };
+            getRequest.onerror = (event) => {
+              console.error('IndexedDB get error:', event);
+              resolve(null);
+            };
+          };
+        });
       },
     });
 

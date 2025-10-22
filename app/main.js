@@ -1,28 +1,31 @@
 import { WebpageParser } from './webpage_parser.js';
-import { FileCompiler } from './file.js';
+import { File } from './file.js';
 
 export async function main() {
   const parser = new WebpageParser();
   parser.activeTabId = await parser.setActiveTabId();
-  parser.props = await parser.setProps();
-  // await parser.init();
-  console.dir(parser);
-  return;
 
-  const file = new FileCompiler(parser.props);
+  const file = new File(
+    await parser.props()
+  );
 
   file.language = await parser.language(
     file.questionId,
-    file.activeSessionId
+    file.activeSessionId,
   );
 
   file.code = await parser.code(
     file.questionId,
     file.activeSessionId,
-    file.language
+    file.language,
   );
 
-  file.testcases = await parser.testcases(file.titleSlug);
+  file.testcases = await parser.testcases(
+    file.titleSlug
+  );
+
+  console.dir(file);
+  return;
 
   file.compile();
 

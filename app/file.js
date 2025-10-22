@@ -2,7 +2,7 @@ import { fileformatMap, headersMap } from './constants.js';
 
 import { Testcases } from '../testcases/testcases.js';
 
-export class FileCompiler {
+export class File {
   constructor(props) {
     const queries = props['props']['pageProps']['dehydratedState']['queries'];
     const secondQuery = queries[1]['state']['data']['question'];
@@ -39,7 +39,6 @@ export class FileCompiler {
 
     array.forEach((element) => {
       if (element) {
-        // console.log(element);
         const lines = element.replace(/^"|"$/g, '').split('\\n');
         lines.forEach((line) => {
           this.content += line + '\n';
@@ -51,8 +50,7 @@ export class FileCompiler {
 
     const fileformat = fileformatMap.get(this.language);
 
-    this.filename =
-      this.questionFrontendId + '. ' + this.questionTitle + '.' + fileformat;
+    this.filename = this.questionFrontendId + '. ' + this.questionTitle + '.' + fileformat;
   }
 
   download() {
