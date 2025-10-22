@@ -4,7 +4,10 @@ import {
   ParsingError,
 } from '../errors/page.js';
 
-import { browserApi, fileformatMap } from './constants.js';
+import { 
+  browserApi, 
+  fileformatMap,
+} from './constants.js';
 
 export class WebpageParser {
   constructor() {
@@ -13,11 +16,11 @@ export class WebpageParser {
   }
 
   async init() {
-    this.activeTabId = await this.getActiveTabId();
-    this.props = await this.parseProps();
+    this.activeTabId = await this.setActiveTabId();
+    this.props = await this.setProps();
   }
 
-  async getActiveTabId() {
+  async setActiveTabId() {
     return new Promise((resolve) => {
       browserApi.tabs.query(
         {
@@ -42,7 +45,7 @@ export class WebpageParser {
     });
   }
 
-  async parseProps() {
+  async setProps() {
     try {
       const results = await browserApi.scripting.executeScript({
         target: { tabId: this.activeTabId },
@@ -69,7 +72,7 @@ export class WebpageParser {
     }
   }
 
-  async getLocalStorageLanguage(questionId, activeSessionId) {
+  async language(questionId, activeSessionId) {
     const key = `${questionId}_${activeSessionId}_lang`;
 
     const [result] = await browserApi.scripting.executeScript({
@@ -90,7 +93,7 @@ export class WebpageParser {
     return result?.result || null;
   }
 
-  async getLocalStorageCode(questionId, activeSessionId, language) {
+  async code(questionId, activeSessionId, language) {
     const fileformat = fileformatMap.get(language);
     const key = `${questionId}_${activeSessionId}_${fileformat}`;
 
@@ -112,7 +115,7 @@ export class WebpageParser {
     return result?.result || null;
   }
 
-  async getSessionStorageTestcases(titleSlug) {
+  async testcases(titleSlug) {
     const key = `QD_TESTCASE_CACHE_${titleSlug}`;
 
     const [result] = await browserApi.scripting.executeScript({

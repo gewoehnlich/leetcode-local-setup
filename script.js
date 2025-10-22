@@ -1,5 +1,5 @@
-import { restoreConfig, saveConfig } from './handlers/config.js';
-import { main } from './handlers/main.js';
+import { restoreConfig, saveConfig } from './app/config.js';
+import { main } from './app/main.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
   await restoreConfig();
